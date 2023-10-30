@@ -346,7 +346,7 @@
             this.txtSDT.Location = new System.Drawing.Point(169, 72);
             this.txtSDT.Name = "txtSDT";
             this.txtSDT.Size = new System.Drawing.Size(107, 26);
-            this.txtSDT.TabIndex = 11;
+            this.txtSDT.TabIndex = 4;
             // 
             // FormQL_KhachHang
             // 

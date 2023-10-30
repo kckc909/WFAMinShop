@@ -59,7 +59,7 @@ namespace WFAMinShop
             TimKiem();
             txtMaKH.Clear();
             Load_KhachHang();
-            cboKH.SelectedIndex = -1;
+            cboKH.SelectedIndex = 0;
         }
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
@@ -238,50 +238,39 @@ namespace WFAMinShop
         // Thêm Hóa đơn bán và tạo chỉ tiết của hóa đơn bán đó
         private void btnThanhToan_Click(object sender, EventArgs e)
         {
-            string sql;
-
-            sql = "select top (1) HDB_Id from HoaDonBan order by HDB_Id desc ";
+            string sql = "select top (1) HDB_Id from HoaDonBan order by HDB_Id desc ";
             string MaHDB = TaoMaNoiTiep(Scalar(sql));
-
             string NV_Id = txtNV_Id.Text;
             if (cboKH.SelectedValue == null)
             {
-                MessageBox.Show("Chưa chọn khác hàng !", "Thông báo", MessageBoxButtons.OK);
+                MessageBox.Show("Chưa chọn khách hàng !", "Thông báo", MessageBoxButtons.OK);
                 return;
             }
             string KH_Id = cboKH.SelectedValue.ToString();
             string NgayBan = txtDate.Text;
-            
-            // Tạo hóa đơn ảo
-            HoaDon hd = new HoaDon()
-            { 
-                MaHD = MaHDB,
-                MaNv = NV_Id, 
-                MaKH = KH_Id, 
-                Ngay = NgayBan
-            };
-            List<ThongTinHoaDon> lst = new List<ThongTinHoaDon>();
-
-            // Tạo hóa đơn bán mới trong csdl
-            sql = $"INSERT INTO HoaDonBan (HDB_Id, NV_Id, KH_Id, NgayBan) VALUES ('{MaHDB}', '{NV_Id}', '{KH_Id}', '{NgayBan}')";
+            if (dgvMH_Ban.Rows.Count < 1)
+            {
+                MessageBox.Show("Chưa mua mặt hàng nào!", "Lỗi", MessageBoxButtons.OK);
+                return;
+            }
+            HienThiHoaDon(MaHDB, NV_Id, KH_Id, NgayBan);
+            LamMoi();
+            LuuHoaDon(MaHDB, NV_Id, KH_Id, NgayBan);
+            MessageBox.Show("Hóa đơn đã được lưu!", "Thông báo", MessageBoxButtons.OK);
+        }
+        void LuuHoaDon(string MaHDB, string NV_Id,string KH_Id,string NgayBan)
+        {
+            string sql = $"INSERT INTO HoaDonBan (HDB_Id, NV_Id, KH_Id, NgayBan) VALUES ('{MaHDB}', '{NV_Id}', '{KH_Id}', '{NgayBan}')";
             ExNonQuery(sql);
 
-            foreach(DataGridViewRow row in dgvMH_Ban.Rows)
+            foreach (DataGridViewRow row in dgvMH_Ban.Rows)
             {
-                if (row.Cells[0].Value is null) continue; 
+                if (row.Cells[0].Value is null) continue;
 
                 string MaMH = row.Cells[0].Value.ToString();
                 string Solg = row.Cells[2].Value.ToString();
                 string Gia = row.Cells[3].Value.ToString();
                 string donvi = row.Cells[4].Value.ToString();
-
-                // Thêm thông tin cho hóa đơn
-                ThongTinHoaDon tt = new ThongTinHoaDon();
-                tt.MaMH = MaMH;
-                tt.Solg = int.Parse(Solg);
-                tt.GiaBan = int.Parse(Gia);
-                tt.TenMH = Scalar($"select MH_Name from MatHang where MH_Id = '{MaMH}'");
-                lst.Add(tt);
 
                 // Ghi vào Chi tiết hóa đơn bán
                 sql = $"INSERT INTO ChiTietHDB (HDB_Id, MH_Id, Quantity, Price, Unit) VALUES ('{MaHDB}', '{MaMH}', '{Solg}', '{Gia}', '{donvi}')";
@@ -291,13 +280,37 @@ namespace WFAMinShop
                 sql = $"Update MatHang set MH_Quantity -= {Solg} where MH_Id = '{MaMH}' ";
                 ExNonQuery(sql);
             }
+        }
+        void HienThiHoaDon(string MaHDB, string NV_Id, string KH_Id, string NgayBan)
+        {
+            // Tạo hóa đơn ảo
+            HoaDon hd = new HoaDon()
+            {
+                MaHD = MaHDB,
+                MaNv = NV_Id,
+                MaKH = KH_Id,
+                Ngay = NgayBan
+            };
+            List<ThongTinHoaDon> lst = new List<ThongTinHoaDon>();
 
-            // Hiển thị hóa đơn
+            foreach (DataGridViewRow row in dgvMH_Ban.Rows)
+            {
+                if (row.Cells[0].Value is null) continue;
 
-            LamMoi();
+                string MaMH = row.Cells[0].Value.ToString();
+                string Solg = row.Cells[2].Value.ToString();
+                string Gia = row.Cells[3].Value.ToString();
+
+                // Thêm thông tin cho hóa đơn
+                ThongTinHoaDon tt = new ThongTinHoaDon();
+                tt.MaMH = MaMH;
+                tt.Solg = int.Parse(Solg);
+                tt.GiaBan = int.Parse(Gia);
+                tt.TenMH = Scalar($"select MH_Name from MatHang where MH_Id = '{MaMH}'");
+                lst.Add(tt);
+            }
             hd.lst = lst;
             hd.ShowDialog();
-            MessageBox.Show("Hóa đơn đã được lưu!", "Thông báo", MessageBoxButtons.OK);
         }
         private string TaoMaNoiTiep (string macu)
         {

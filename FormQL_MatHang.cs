@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -67,13 +68,20 @@ namespace WFAMinShop
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
+            string sql;
             if (kiemtratontai(txtMaMH.Text))
             {
-                string sql = $"Delete from MatHang where MH_Id = '{txtMaMH.Text}'";
+                sql = $"Select count(*) from MatHang m inner join ChiTietHDB cb on cb.MH_Id = m.MH_Id where m.MH_Id = '{txtMaMH.Text}'";
+                if (ExScalar(sql) > 0)
+                {
+                    MessageBox.Show($"Không thể xóa mặt hàng đã tạo được mua !!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                sql = $"Delete from MatHang where MH_Id = '{txtMaMH.Text}'";
                 DialogResult c =  MessageBox.Show($"Bạn có muốn xóa mặt hàng không?", "Hỏi", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (c == DialogResult.Yes)
                 {
-                    ThucThiCommand(sql);
+                    ExNonQuery(sql);
                     MessageBox.Show($"Xóa thành công!", "Thông báo");
                     DialogResult = DialogResult.OK;
                 }
@@ -91,6 +99,7 @@ namespace WFAMinShop
 
         private void button1_Click(object sender, EventArgs e)
         {
+
             cboMaLoai.SelectedIndex = -1;
             txtMaMH.Clear();
             txtTenMH.Clear();
@@ -99,15 +108,15 @@ namespace WFAMinShop
             txtSoLg.Clear();
             txtMaMH.ReadOnly = false;
 
-            Ketnoi();
             DataView dv;
+            Ketnoi();
             adapter = new SqlDataAdapter("Select * from MatHang", conn);
             table = new DataTable();
             adapter.Fill(table);
+            Ngatketnoi();
 
             dv = table.DefaultView;
             dgvMatHang.DataSource = dv;
-            Ngatketnoi();
         }
 
         private void LoadData_PhiKetNoi()
@@ -166,7 +175,7 @@ namespace WFAMinShop
             string MaMH = txtMaMH.Text;
             string TenMH = txtTenMH.Text;
             string MoTa = txtMoTa.Text;
-            string SoLg = txtSoLg.Text;
+            // Số lượng ban đầu mặc định là 0
             string GiaN = txtGiaNhap.Text;
             string donVi = txtDonVi.Text;
             string maloai = cboMaLoai.SelectedValue.ToString();
@@ -181,17 +190,15 @@ namespace WFAMinShop
             {
                 // Thay doi csdl
                 string sql = $"Insert into MatHang (MH_Id, MH_Name, MH_Description, MH_Quantity, MH_Price, MH_S_Price, MH_Unit, LH_Id) " +
-                    $"values (N'{MaMH}', N'{TenMH}', N'{MoTa}', {SoLg}, '{GiaN}', {GiaB}, N'{donVi}', N'{maloai}')";
-                ThucThiCommand(sql);
+                    $"values (N'{MaMH}', N'{TenMH}', N'{MoTa}', 0, '{GiaN}', {GiaB}, N'{donVi}', N'{maloai}')";
+                ExNonQuery(sql);
+                MessageBox.Show("Thêm thành công", "Thông báo",
+                    MessageBoxButtons.OK);
             }
         }
         private bool kiemtratontai(string MaMH)
         {
-            Ketnoi();
-            string sql = $"select Count(*) from MatHang where MH_Id = N'{MaMH}'";
-            cmd = new SqlCommand(sql, conn);
-            int n = (int)cmd.ExecuteScalar();
-            Ngatketnoi();
+            int n = ExScalar($"select Count(*) from MatHang where MH_Id = N'{MaMH}'");
             if (n > 0) return true;
             else return false;
         }
@@ -222,16 +229,27 @@ namespace WFAMinShop
                              $"MH_Unit = N'{donVi}', " +
                              $"LH_Id = '{maloai}' " +
                          $"Where MH_Id = '{MaMH}'";
-            ThucThiCommand(sql);
+            ExNonQuery(sql);
+            MessageBox.Show("Sửa thành công", "Thông báo",
+                    MessageBoxButtons.OK);
         }
 
-        private void ThucThiCommand(string sql)
+        private void ExNonQuery(string sql)
         {
             Ketnoi();
             cmd = new SqlCommand(sql, conn);
             cmd.ExecuteNonQuery();
             LoadData_PhiKetNoi();
             Ngatketnoi();
+        }
+
+        int ExScalar(string sql)
+        {
+            Ketnoi();
+            cmd = new SqlCommand(sql, conn);
+            int r = (int)cmd.ExecuteScalar();
+            Ngatketnoi();
+            return r;
         }
 
         private void btnTimKiem_Click_1(object sender, EventArgs e)

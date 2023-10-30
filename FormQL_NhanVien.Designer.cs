@@ -284,7 +284,7 @@
             this.txtSDT.Location = new System.Drawing.Point(394, 63);
             this.txtSDT.Name = "txtSDT";
             this.txtSDT.Size = new System.Drawing.Size(116, 26);
-            this.txtSDT.TabIndex = 14;
+            this.txtSDT.TabIndex = 4;
             this.txtSDT.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSDT_KeyPress);
             // 
             // NgaySinh
@@ -295,7 +295,7 @@
             this.NgaySinh.MinDate = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
             this.NgaySinh.Name = "NgaySinh";
             this.NgaySinh.Size = new System.Drawing.Size(108, 26);
-            this.NgaySinh.TabIndex = 13;
+            this.NgaySinh.TabIndex = 3;
             // 
             // label9
             // 
