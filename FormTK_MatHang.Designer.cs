@@ -47,6 +47,7 @@
             this.dgv.ReadOnly = true;
             this.dgv.Size = new System.Drawing.Size(776, 295);
             this.dgv.TabIndex = 0;
+            this.dgv.TabStop = false;
             // 
             // label1
             // 
