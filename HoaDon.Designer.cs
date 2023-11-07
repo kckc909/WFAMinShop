@@ -50,6 +50,7 @@
             this.lbTongTien = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.lbSDT = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // lstV
@@ -69,6 +70,7 @@
             this.lstV.Scrollable = false;
             this.lstV.Size = new System.Drawing.Size(424, 206);
             this.lstV.TabIndex = 0;
+            this.lstV.TabStop = false;
             this.lstV.UseCompatibleStateImageBehavior = false;
             this.lstV.View = System.Windows.Forms.View.Details;
             // 
@@ -248,6 +250,19 @@
             this.lbSDT.TabIndex = 16;
             this.lbSDT.Text = "label9";
             // 
+            // textBox1
+            // 
+            this.textBox1.BackColor = System.Drawing.Color.White;
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.ForeColor = System.Drawing.Color.White;
+            this.textBox1.Location = new System.Drawing.Point(165, 16);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(10, 15);
+            this.textBox1.TabIndex = 17;
+            this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
+            this.textBox1.Leave += new System.EventHandler(this.textBox1_Leave);
+            // 
             // HoaDon
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -270,8 +285,9 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.lstV);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.textBox1);
             this.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "HoaDon";
@@ -308,5 +324,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label lbSDT;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }

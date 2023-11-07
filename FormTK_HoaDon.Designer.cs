@@ -109,9 +109,11 @@
             this.dgv.Location = new System.Drawing.Point(12, 182);
             this.dgv.MultiSelect = false;
             this.dgv.Name = "dgv";
+            this.dgv.ReadOnly = true;
             this.dgv.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv.Size = new System.Drawing.Size(775, 256);
             this.dgv.TabIndex = 11;
+            this.dgv.TabStop = false;
             this.dgv.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellDoubleClick_1);
             // 
             // cbo

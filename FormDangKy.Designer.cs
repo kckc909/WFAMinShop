@@ -31,6 +31,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.labelDN = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.btnDangKy = new System.Windows.Forms.Button();
             this.txtNhapLaiMK = new System.Windows.Forms.TextBox();
@@ -45,7 +46,6 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.labelDN = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -95,6 +95,19 @@
             this.groupBox2.Size = new System.Drawing.Size(382, 269);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
+            // 
+            // labelDN
+            // 
+            this.labelDN.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelDN.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(142)))), ((int)(((byte)(142)))));
+            this.labelDN.Location = new System.Drawing.Point(199, 243);
+            this.labelDN.Name = "labelDN";
+            this.labelDN.Size = new System.Drawing.Size(75, 19);
+            this.labelDN.TabIndex = 19;
+            this.labelDN.Text = "Đăng nhập";
+            this.labelDN.Click += new System.EventHandler(this.labelDN_Click);
+            this.labelDN.MouseEnter += new System.EventHandler(this.label6_MouseEnter);
+            this.labelDN.MouseLeave += new System.EventHandler(this.labelDN_MouseLeave);
             // 
             // label5
             // 
@@ -154,6 +167,7 @@
             this.txtTen.ReadOnly = true;
             this.txtTen.Size = new System.Drawing.Size(197, 23);
             this.txtTen.TabIndex = 12;
+            this.txtTen.TabStop = false;
             // 
             // txtMa
             // 
@@ -222,19 +236,6 @@
             this.label2.Size = new System.Drawing.Size(131, 17);
             this.label2.TabIndex = 0;
             this.label2.Text = "Nhập mã nhân viên";
-            // 
-            // labelDN
-            // 
-            this.labelDN.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelDN.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(142)))), ((int)(((byte)(142)))));
-            this.labelDN.Location = new System.Drawing.Point(206, 243);
-            this.labelDN.Name = "labelDN";
-            this.labelDN.Size = new System.Drawing.Size(75, 19);
-            this.labelDN.TabIndex = 19;
-            this.labelDN.Text = "Đăng nhập";
-            this.labelDN.Click += new System.EventHandler(this.labelDN_Click);
-            this.labelDN.MouseEnter += new System.EventHandler(this.label6_MouseEnter);
-            this.labelDN.MouseLeave += new System.EventHandler(this.labelDN_MouseLeave);
             // 
             // FormDangKy
             // 

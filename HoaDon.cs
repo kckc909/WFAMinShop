@@ -48,8 +48,21 @@ namespace WFAMinShop
 
         private void HoaDon_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char)Keys.Escape)
                 Close();
+        }
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+            if (e.KeyChar == (char)Keys.Escape)
+            {
+                Close();
+            }
+        }
+
+        private void textBox1_Leave(object sender, EventArgs e)
+        {
+            textBox1.Focus();
         }
     }
     public class ThongTinHoaDon

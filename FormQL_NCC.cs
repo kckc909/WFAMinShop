@@ -70,14 +70,29 @@ namespace WFAMinShop
             return i > 0;
         }
 
+        bool KiemTraRong()
+        {
+            if (txtMaNCC.Text == ""
+                || txtTenNCC.Text == ""
+                || txtDiaChi.Text == ""
+                || txtSDT.Text == "")
+                return false;
+            return true;
+        }
+
         private void btnThem_Click(object sender, EventArgs e)
         {
             string NCC_Id = txtMaNCC.Text.Trim();
             string NCC_Name = txtTenNCC.Text.Trim();
             string NCC_PhoneNumbers = txtSDT.Text.Trim();
             string NCC_Address = txtDiaChi.Text.Trim();
-            if (!KiemTraTonTai(NCC_Id) && NCC_Id != "")
+            if (!KiemTraTonTai(NCC_Id))
             {
+                if (!KiemTraRong())
+                {
+                    MessageBox.Show("Vui lòng điền đầy đủ thông tin!", "Lỗi", MessageBoxButtons.OK);
+                    return;
+                }
                 string sql = $"Insert Into NhaCungCap " +
                              $"Values ('{NCC_Id}', N'{NCC_Name}', N'{NCC_PhoneNumbers}', N'{NCC_Address}')";
                 Excute_SQLCommand(sql);
@@ -103,6 +118,12 @@ namespace WFAMinShop
             string NCC_PhoneNumbers = txtSDT.Text.Trim();
             string NCC_Address = txtDiaChi.Text.Trim();
 
+            if (!KiemTraRong())
+            {
+                MessageBox.Show("Vui lòng điền đầy đủ thông tin!", "Lỗi", MessageBoxButtons.OK);
+                return;
+            }
+
             string sql = $"Update NhaCungCap " +
                          $"Set NCC_Name = N'{NCC_Name}'," +
                              $"NCC_PhoneNumbers = '{NCC_PhoneNumbers}'," +
@@ -112,6 +133,15 @@ namespace WFAMinShop
             Excute_SQLCommand(sql);
         }
 
+        int Scalar(string sql)
+        {
+            Ketnoi();
+            cmd = new SqlCommand(sql, conn);
+            int r = (int)cmd.ExecuteScalar();
+            Ngatketnoi();
+            return r;
+        }
+
         private void btnXoa_Click(object sender, EventArgs e)
         {
             if (KiemTraTonTai(txtMaNCC.Text))
@@ -119,6 +149,11 @@ namespace WFAMinShop
                 DialogResult c = MessageBox.Show("Bạn có muốn xóa nhà cung cấp không?", "Cảnh báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question); 
                 if (c == DialogResult.Yes)
                 {
+                    if (Scalar($"select count(*) from NhaCungCap k inner join HoaDonNhap h on k.NCC_Id = h.NCC_Id where k.NCC_Id = '{txtMaNCC.Text}'") > 0)
+                    {
+                        MessageBox.Show("Không thể xóa nhà cung cấp đã cung cấp hàng cho cửa hàng!!", "Lỗi", MessageBoxButtons.OK);
+                        return;
+                    }
                     string sql = $"delete NhaCungCap where NCC_Id = '{txtMaNCC.Text}'";
                     Excute_SQLCommand(sql);
                 }

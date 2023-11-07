@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using System.Windows.Forms;
 
 namespace WFAMinShop
@@ -105,6 +106,15 @@ namespace WFAMinShop
             ngatketnoi();
         }
 
+        bool KiemTraRong()
+        {
+            if (txtMaKH.Text == "" || txtTenKH.Text == "" || cboGT.Text == "" || txtDiaChi.Text == "" || txtSDT.Text == "")
+            {
+                return false;
+            }
+            return true;
+        }
+
         private void btnThem_Click(object sender, EventArgs e)
         {
             string KH_Id = txtMaKH.Text.Trim();
@@ -112,8 +122,13 @@ namespace WFAMinShop
             string KH_Sex = cboGT.Text.ToString().Trim();
             string KH_PhoneNumbers = txtSDT.Text.Trim();
             string KH_Address = txtDiaChi.Text.Trim();
-            if (!KiemTraTonTai(KH_Id) && KH_Id != "")
+            if (!KiemTraTonTai(KH_Id))
             {
+                if (!KiemTraRong())
+                {
+                    MessageBox.Show("Vui lòng điền đầy đủ thông tin!", "Lỗi", MessageBoxButtons.OK);
+                    return;
+                }
                 string sql = $"Insert Into KhachHang" +
                              $"Values ('{KH_Id}', N'{KH_Name}', N'{KH_Sex}', N'{KH_PhoneNumbers}', N'{KH_Address}')";
                 Excute_SQLCommand(sql);
@@ -126,11 +141,17 @@ namespace WFAMinShop
 
         private void btnSua_Click(object sender, EventArgs e)
         {
+            if (!KiemTraRong())
+            {
+                MessageBox.Show("Vui lòng điền đầy đủ thông tin!", "Lỗi", MessageBoxButtons.OK);
+                return;
+            }
             string KH_Id = txtMaKH.Text.Trim();
             string KH_Name = txtTenKH.Text.Trim();
             string KH_Sex = cboGT.Text;
             string KH_PhoneNumbers = txtSDT.Text.Trim();
             string KH_Address = txtDiaChi.Text.Trim();
+
 
             string sql = $"Update KhachHang " +
                          $"Set KH_Name = N'{KH_Name}'," +
@@ -142,6 +163,15 @@ namespace WFAMinShop
             Excute_SQLCommand(sql);
         }
 
+        int Scalar(string sql)
+        {
+            ketnoi();
+            cmd = new SqlCommand(sql, conn);
+            int r = (int)cmd.ExecuteScalar();
+            ngatketnoi();
+            return r;
+        }
+
         private void btnXoa_Click(object sender, EventArgs e)
         {
             if (KiemTraTonTai(txtMaKH.Text) == true)
@@ -149,6 +179,11 @@ namespace WFAMinShop
                 DialogResult c = MessageBox.Show("Bạn có muốn xóa khách hàng này không!", "Cảnh báo", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                 if (c == DialogResult.Yes)
                 {
+                    if (Scalar($"select count(*) from KhachHang k inner join HoaDonBan h on k.KH_Id = h.KH_Id where k.KH_Id = '{txtMaKH.Text}'") > 0)
+                    {
+                        MessageBox.Show("Không thể xóa khách hàng đã mua hàng tại cửa hàng !!", "Lỗi", MessageBoxButtons.OK);
+                        return;
+                    }
                     string sql = $"Delete KhachHang " +
                         $"Where KH_Id = N'{txtMaKH.Text}'";
                     Excute_SQLCommand(sql);
