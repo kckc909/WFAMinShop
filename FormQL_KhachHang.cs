@@ -124,6 +124,7 @@ namespace WFAMinShop
             string KH_Address = txtDiaChi.Text.Trim();
             if (!KiemTraTonTai(KH_Id))
             {
+                // Kiểm tra nếu rỗng thì yêu cầu nhập lại
                 if (!KiemTraRong())
                 {
                     MessageBox.Show("Vui lòng điền đầy đủ thông tin!", "Lỗi", MessageBoxButtons.OK);
