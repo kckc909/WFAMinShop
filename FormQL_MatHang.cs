@@ -165,6 +165,7 @@ namespace WFAMinShop
 
         private void btnThem_Click(object sender, EventArgs e)
         {
+            txtSoLg.Text = "0";
             if (!Check_Null())
             {
                 MessageBox.Show("Dữ liệu bị trống hoặc bị sai, hãy kiểm tra lại !!!", "Lỗi",

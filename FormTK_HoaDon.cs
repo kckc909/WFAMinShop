@@ -149,7 +149,7 @@ namespace WFAMinShop
             hd.SDT = Scalar($"select NCC_PhoneNumbers from NhaCungCap where NCC_Id = '{hd.MaKH}'");
             hd.Ngay = Scalar($"select NgayNhap from HoaDonNhap where HDN_Id = '{MaHD}'");
             hd.lst = NoiDung($"select c.MH_Id, MH_Name, Quantity, Price from ChiTietHDN c inner join MatHang m on m.MH_Id = c.MH_Id where HDN_Id = '{MaHD}'");
-            hd.ShowDialog();
+            hd.Show();
         }
         private void HoaDonBan(string MaHD)
         {
@@ -161,7 +161,7 @@ namespace WFAMinShop
             hd.SDT = Scalar($"select KH_PhoneNumbers from KhachHang where KH_Id = '{hd.MaKH}'");
             hd.Ngay = Scalar($"select NgayBan from HoaDonBan where HDB_Id = '{MaHD}'");
             hd.lst = NoiDung($"select c.MH_Id, MH_Name, Quantity, Price from ChiTietHDB c inner join MatHang m on m.MH_Id = c.MH_Id where HDB_Id = '{MaHD}'");
-            hd.ShowDialog();
+            hd.Show();
         }
         string Scalar(string sql)
         {
@@ -178,6 +178,7 @@ namespace WFAMinShop
             Ketnoi();
             cmd = new SqlCommand(sql, conn);
             var reader = cmd.ExecuteReader();
+            Ngatketnoi();
             while (reader.Read())
             {
                 ThongTinHoaDon tt = new ThongTinHoaDon()
@@ -189,7 +190,6 @@ namespace WFAMinShop
                 };
                 lst.Add(tt);
             }
-            Ngatketnoi();
 
             return lst;
         }

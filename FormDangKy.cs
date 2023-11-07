@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -61,7 +62,7 @@ namespace WFAMinShop
                     }
                     if (KiemTraTaiKhoan(Tk))
                     {
-                        if (Mk.Trim().Length > 4)
+                        if (Mk.Trim().Length > 1)
                         {
                             if (Equals(Mk, txtNhapLaiMK.Text))
                             {
@@ -80,15 +81,13 @@ namespace WFAMinShop
                                          MessageBoxIcon.Question);
                                     if (c == DialogResult.Yes)
                                     {
-                                        Ketnoi();
-                                        cmd = new SqlCommand($"delete from Account_Password where MaDinhDanh = '{MaNV}'", conn);
-                                        cmd.ExecuteNonQuery();
-
-                                        Ngatketnoi();
-                                        ThemTaiKhoan(Tk, Mk, MaNV);
-                                        MessageBox.Show("Tạo lại tài khoản thành công!!",
-                                            "Thông báo");
+                                        SuaTaiKhoan(Tk, Mk, MaNV);
+                                        MessageBox.Show("Tạo lại tài khoản thành công!!", "Thông báo");
                                     }
+                                }
+                                if (!_DangKyHo)
+                                {
+                                    labelDN_Click(sender, e);
                                 }
                             }
                             else
@@ -101,7 +100,7 @@ namespace WFAMinShop
                         else
                         {
                             // Mật khẩu phải dài hơn 6 kí tự
-                            MessageBox.Show("Mật khẩu phải dài hơn 4 kí tự!!", "Lỗi", MessageBoxButtons.OK);
+                            MessageBox.Show("Mật khẩu phải dài hơn 1 kí tự!!", "Lỗi", MessageBoxButtons.OK);
                             txtMatKhau.Focus();
                         }
                     }
@@ -142,6 +141,19 @@ namespace WFAMinShop
 
             Ngatketnoi();
         }
+
+        private void SuaTaiKhoan(string Tk, string Mk, string MaNV)
+        {
+            Ketnoi();
+
+            string sql = $"update Account_Password set TaiKhoan = '{Tk}', MatKhau = '{Mk}' where MaDinhDanh = '{MaNV}'";
+
+            cmd = new SqlCommand(sql, conn);
+            cmd.ExecuteNonQuery();
+
+            Ngatketnoi();
+        }
+
         private bool KiemTraTonTaiUser(string ma, out string sdt)
         {
             Ketnoi();
@@ -206,10 +218,12 @@ namespace WFAMinShop
             if (_DangKyHo)
             {
                 label5.Visible = false;
+                labelDN.Visible = false;
             }
             else
             {
                 label5.Visible = true;
+                labelDN.Visible = true;
             }
         }
 
